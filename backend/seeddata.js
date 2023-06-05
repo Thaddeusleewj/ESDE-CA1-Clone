@@ -5,7 +5,6 @@ const config = require('./src/config/config');
 const cloudinary = require('cloudinary').v2;
 const pool = require('./src/config/database')
 
-
 cloudinary.config({
     cloud_name: config.cloudinaryCloudName,
     api_key: config.cloudinaryApiKey,
