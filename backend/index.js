@@ -39,19 +39,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
+const winston = require("winston");
+const expressWinston = require("express-winston");
 
-
-
-
-
-
-
-
+// logger code
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console({
+            json: true,
+            colourize: true
+        })
+    ]
+}));
 
 //Express Router
 const router = express.Router();
 app.use(router);
 const rootPath = path.resolve("./dist");
+
+// error logger
+app.use(expressWinston.errorLogger({
+    transports: [
+        new winston.transports.Console({
+            json: true,
+            colourize: true
+        })
+    ]
+}));
 
 //All client side files are parked inside the dist directory.
 //The client side files are compiled by using Gulp
@@ -75,10 +89,6 @@ router.use((err, req, res, next) => {
         return res.send(err.message);
     }
 });
-
-
-
-
 
 app.listen(PORT, err => {
     if (err) return console.log(`Cannot Listen on PORT: ${PORT}`);
