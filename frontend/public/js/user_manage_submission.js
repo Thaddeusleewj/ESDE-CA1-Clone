@@ -1,22 +1,42 @@
+// Detect if user tamper with log in user id
+const userid = localStorage.getItem("user_id");
+const token = localStorage.getItem("token");
+window.addEventListener(
+    "storage",
+    function () {
+        const newUserId = localStorage.getItem("user_id");
+        const newToken = localStorage.getItem("token");
+        if (newUserId != userid) {
+            localStorage.setItem("user_id", userid);
+            window.location.reload();
+        }
+        if (newToken != token) {
+            localStorage.setItem("token", token);
+            window.location.reload();
+        }
+    },
+    false
+);
+
 let $searchDesignFormContainer = $('#searchDesignFormContainer');
 if ($searchDesignFormContainer.length != 0) {
     console.log('Search design form detected in user manage submission interface. Binding event handling logic to form elements.');
     //If the jQuery object which represents the form element exists,
     //the following code will create a method to send key-value pair information to do record searching
     //to server-side api when the #submitButton element fires the click event.
-    $('#submitButton').on('click', function(event) {
+    $('#submitButton').on('click', function (event) {
         event.preventDefault();
         const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
         let searchInput = $('#searchInput').val();
         let userId = localStorage.getItem('user_id');
         axios({
-                headers: {
-                    'user': userId
-                },
-                method: 'get',
-                url: baseUrl + '/api/user/process-search-design/1/' + searchInput,
-            })
-            .then(function(response) {
+            headers: {
+                'user': userId
+            },
+            method: 'get',
+            url: baseUrl + '/api/user/process-search-design/1/' + searchInput,
+        })
+            .then(function (response) {
                 //console.log(response)
                 //Using the following to inspect the response.data data structure
                 //before deciding the code which dynamically generates cards.
@@ -41,11 +61,11 @@ if ($searchDesignFormContainer.length != 0) {
                 }
                 for (let index = 0; index < records.length; index++) {
                     let record = records[index];
-                    console.log(record)                    
+                    console.log(record)
                     let $container;
-                    if(index%2==0)
+                    if (index % 2 == 0)
                         $container = $('<div></div>').addClass(' offset-sm-2 col-sm-3 mb-4');
-                    else 
+                    else
                         $container = $('<div></div>').addClass(' offset-sm-1 col-sm-3 mb-4');
                     let $card = $('<div></div>').addClass('card text-center h-100');
                     $card.append($('<img></img>').addClass('card-img-top').addClass('app_thumbnail').attr('src', record.cloudinary_url));
@@ -55,7 +75,7 @@ if ($searchDesignFormContainer.length != 0) {
                     $cardBody.append($('<h5></h5>').addClass('card-title').append(record.design_title));
                     $cardBody.append($('<p></p>').addClass('card-text').append(record.design_description));
                     $cardBody.append($editDesignButtonBlock);
-                    
+
                     $card.append($cardBody);
                     $container.append($card);
                     //After preparing all the necessary HTML elements to describe the file data,
@@ -67,13 +87,13 @@ if ($searchDesignFormContainer.length != 0) {
 
                 for (let count = 1; count <= totalPages; count++) {
 
-                    let $button = $(`<button class="btn btn-primary btn-sm mr-1" />`);                    
+                    let $button = $(`<button class="btn btn-primary btn-sm mr-1" />`);
                     $button.text(count);
                     $button.click(clickHandlerForPageButton);
                     $pageButtonContainer.append($button);
                 } //End of for loop to add page buttons
 
-            }).catch(function(response) {
+            }).catch(function (response) {
                 //Handle error
                 console.dir(response);
                 new Noty({
@@ -98,13 +118,13 @@ if ($searchDesignFormContainer.length != 0) {
         let searchInput = $('#searchInput').val();
         console.log(pageNumber);
         axios({
-                headers: {
-                    'user': userId
-                },
-                method: 'get',
-                url: baseUrl + '/api/user/process-search-design/' + pageNumber + '/' + searchInput,
-            })
-            .then(function(response) {
+            headers: {
+                'user': userId
+            },
+            method: 'get',
+            url: baseUrl + '/api/user/process-search-design/' + pageNumber + '/' + searchInput,
+        })
+            .then(function (response) {
                 //Using the following to inspect the response.data data structure
                 //before deciding the code which dynamically generates cards.
                 //Each card describes a design record.
@@ -120,11 +140,11 @@ if ($searchDesignFormContainer.length != 0) {
 
                 for (let index = 0; index < records.length; index++) {
                     let record = records[index];
-                    console.log(record)                    
+                    console.log(record)
                     let $container;
-                    if(index%2==0)
+                    if (index % 2 == 0)
                         $container = $('<div></div>').addClass(' offset-sm-2 col-sm-3 mb-4');
-                    else 
+                    else
                         $container = $('<div></div>').addClass(' offset-sm-1 col-sm-3 mb-4');
                     let $card = $('<div></div>').addClass('card text-center h-100');
                     $card.append($('<img></img>').addClass('card-img-top').addClass('app_thumbnail').attr('src', record.cloudinary_url));
@@ -134,7 +154,7 @@ if ($searchDesignFormContainer.length != 0) {
                     $cardBody.append($('<h5></h5>').addClass('card-title').append(record.design_title));
                     $cardBody.append($('<p></p>').addClass('card-text').append(record.design_description));
                     $cardBody.append($editDesignButtonBlock);
-                    
+
                     $card.append($cardBody);
                     $container.append($card);
                     //After preparing all the necessary HTML elements to describe the file data,
@@ -146,13 +166,13 @@ if ($searchDesignFormContainer.length != 0) {
 
                 for (let count = 1; count <= totalPages; count++) {
 
-                    let $button = $(`<button class="btn btn-primary btn-sm mr-1" />`);                    
+                    let $button = $(`<button class="btn btn-primary btn-sm mr-1" />`);
                     $button.text(count);
                     $button.click(clickHandlerForPageButton);
                     $pageButtonContainer.append($button);
                 } //End of for loop to add page buttons
             })
-            .catch(function(response) {
+            .catch(function (response) {
                 //Handle error
                 console.dir(response);
                 new Noty({

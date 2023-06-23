@@ -4,10 +4,7 @@ const bcrypt = require('bcrypt');
 const config = require('../config/config');
 const jwt = require('jsonwebtoken');
 
-
-
 exports.processLogin = (req, res, next) => {
-
     let email = req.body.email;
     let password = req.body.password;
     try {
@@ -30,14 +27,17 @@ exports.processLogin = (req, res, next) => {
                         return res.status(500).json({ message: 'login failed' });
                     }
                     if (bcrypt.compareSync(password, results[0].user_password) == true) {
-
+                        // include the rolename of the user in order to find 
                         let data = {
                             user_id: results[0].user_id,
                             role_name: results[0].role_name,
-                            token: jwt.sign({ id: results[0].user_id }, config.JWTKey, {
+                            // including the user role in the token
+                            token: jwt.sign({ id: results[0].user_id, role: results[0].role_name }, config.JWTKey, {
                                 expiresIn: 86400 //Expires in 24 hrs
                             })
                         }; //End of data variable setup
+                        // console.log(data);
+                        // console.log(data.role_name);
 
                         return res.status(200).json(data);
                     } else {
@@ -45,17 +45,11 @@ exports.processLogin = (req, res, next) => {
                         return res.status(500).json({ message: error });
                     } //End of passowrd comparison with the retrieved decoded password.
                 } //End of checking if there are returned SQL results
-
             }
-
         })
-
     } catch (error) {
         return res.status(500).json({ message: error });
     } //end of try
-
-
-
 };
 
 exports.processRegister = (req, res, next) => {
@@ -82,8 +76,6 @@ exports.processRegister = (req, res, next) => {
                     return res.status(500).json({ statusMessage: 'Unable to complete registration' });
                 }
                 });//End of anonymous callback function
-     
-          
         }
     });
 

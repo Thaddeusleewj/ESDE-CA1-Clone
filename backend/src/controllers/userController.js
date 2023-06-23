@@ -98,7 +98,10 @@ exports.processGetSubmissionsbyEmail = async(req, res, next) => {
 exports.processGetUserData = async(req, res, next) => {
     let pageNumber = req.params.pagenumber;
     let search = req.params.search;
-
+    // req.header.authorization = localStorage.getItem("user_id") + " " + localStorage.getItem("token") + " " + localStorage.getItem("role")
+    console.log('pageNum', pageNumber);
+    console.log('search', search);
+    
     try {
         let results = await userManager.getUserData(pageNumber, search);
         console.log('Inspect result variable inside processGetUserData code\n', results);

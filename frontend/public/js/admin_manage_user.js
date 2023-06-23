@@ -9,13 +9,16 @@ if ($searchDesignFormContainer.length != 0) {
         const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
         let searchInput = $('#searchInput').val();
         let userId = localStorage.getItem('user_id');
+        // Getting token from localstorage
+        let token = localStorage.getItem('token');
         axios({
                 headers: {
                     //Modify this will affect the checkUserFn.js middleware file at the backend.
-                    'user': userId
+                    'user': userId,
+                    'authorization': `Bearer ${token}`
                 },
                 method: 'get',
-                url: baseUrl + '/api/user/process-search-user/1/' + searchInput,
+                url: baseUrl + '/api/user/process-search-user/2/' + searchInput,
             })
             .then(function(response) {
                 //Using the following to inspect the response.data data structure
@@ -81,7 +84,7 @@ if ($searchDesignFormContainer.length != 0) {
             }).catch(function(response) {
                 //Handle error
                 console.dir(response);
-                new Noty({
+               new Noty({
                     type: 'error',
                     layout: 'topCenter',
                     timeout: '5000',
@@ -98,9 +101,11 @@ if ($searchDesignFormContainer.length != 0) {
         let pageNumber = $(event.target).text().trim();
         let searchInput = $('#searchInput').val();
         console.log('Checking the button page number which raised the click event : ', pageNumber);
+        let token = localStorage.getItem('token');
         axios({
                 headers: {
-                    'user': userId
+                    'user': userId,
+                    'authorization': `Bearer ${token}`
                 },
                 method: 'get',
                 url: baseUrl + '/api/user/process-search-user/' + pageNumber + '/' + searchInput,
@@ -166,6 +171,5 @@ if ($searchDesignFormContainer.length != 0) {
                     text: 'Unable to search',
                 }).show();
             });
-
     } //End of clickHandlerForPageButton
-} //End of checking for $searchUserFormContainer jQuery object
+} //End of checking for $searchUserFormContainer jQuery object 

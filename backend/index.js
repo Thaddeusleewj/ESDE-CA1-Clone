@@ -68,6 +68,7 @@ router.get('/', (req, res, next) => {
     res.end();
 });
 
+
 router.use((err, req, res, next) => {
     if (err) {
         //Handle file type and max size of image

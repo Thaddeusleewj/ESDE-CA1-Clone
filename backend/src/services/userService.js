@@ -73,10 +73,11 @@ module.exports.getUserData = (pageNumber, search) => {
         FROM user INNER JOIN role ON user.role_id = role.role_id LIMIT ? OFFSET ?;
         SET @total_records =(SELECT count(user_id) FROM user    );SELECT @total_records total_records; `;
         queryParams = [limit, offset];
+        console.log(limit, offset);
     } else {
-        userDataQuery = `SELECT user_id, fullname, email, role_name 
-        FROM user INNER JOIN role ON user.role_id = role.role_id AND fullname LIKE '%?%'  LIMIT ? OFFSET ?;
-        SET @total_records =(SELECT count(user_id) FROM user WHERE fullname LIKE '%?%' );SELECT @total_records total_records;`;
+        userDataQuery = `SELECT user_id, fullname, email, role_name FROM user INNER JOIN role ON user.role_id = role.role_id WHERE fullname LIKE CONCAT('%', ?, '%') LIMIT ? OFFSET ?;
+        SET @total_records = (SELECT COUNT(user_id) FROM user WHERE fullname LIKE CONCAT('%', ?, '%'));
+        SELECT @total_records AS total_records;`
         queryParams = [search, limit, offset, search];
     }
 
