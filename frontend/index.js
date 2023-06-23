@@ -1,6 +1,9 @@
 
 const express=require('express');
 const serveStatic=require('serve-static');
+const https = require("https");
+const path = require("path");
+const fs = require("fs");
 
 
 var hostname="localhost";
@@ -33,8 +36,12 @@ app.get("/", (req, res) => {
     res.sendFile("/public/home.html", { root: __dirname });
 });
 
+const sslServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname + "/..", 'cert', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname + "/..", 'cert', 'cert.pem'))
+}, app)
 
 //app.listen(port,hostname,function(){
-app.listen(port, function(){
-    console.log(`Server hosted at http://${hostname}:${port}`);
+sslServer.listen(port, function(){
+    console.log(`Server hosted at https://${hostname}:${port}`);
 });

@@ -8,7 +8,7 @@ if ($profileContainer.length != 0) {
 
     function getOneUser() {
 
-        const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
+        const baseUrl = "https://" + window.location.host.replace("3001", "5000");
 
         let userId = localStorage.getItem('user_id');
         axios({

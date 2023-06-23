@@ -8,7 +8,6 @@ const registerUserFn = require("./middlewares/registerUserFn");
 
 // Match URL's with controllers
 exports.appRoute = router => {  
-
     router.post('/api/user/login', authController.processLogin);
     router.post('/api/user/register', registerUserFn.validateUser, authController.processRegister);
     // router.post('/api/user/register', authController.processRegister);
