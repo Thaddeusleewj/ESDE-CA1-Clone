@@ -9,9 +9,9 @@ let uploadValidateFn = {
 
         // creating the regex checks
         // matches one or more occurences of word characters, whitespace and punctuation characters
-        let titleRegex = new RegExp(`^[\w\s\d\p{P}\p{S}]+$`);
+        let titleRegex = new RegExp(`^[\\w\\s]+$`);
         // matches one or more occurances of word characters, digits, punctuation and special characters
-        let descriptionRegex = new RegExp(`^[\w\s\d\p{P}\p{S}]+$`);
+        let descriptionRegex = new RegExp(`^[\\w\\s]+$`);
 
         if (titleRegex.test(titleInput) && descriptionRegex.test(descriptionInput)){
             // if passed all regex test, call next middleware

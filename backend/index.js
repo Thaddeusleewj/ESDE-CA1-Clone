@@ -16,7 +16,6 @@ const bootstrap = require("./src/bootstrap");
 
 //https://github.com/ortexx/express-form-data#readme
 
-
 //Parse data with connect-multiparty. 
 app.use(formData.parse({}));
 //Delete from the request all empty files (size == 0)

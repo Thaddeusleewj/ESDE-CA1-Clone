@@ -14,8 +14,10 @@ module.exports.checkForValidUserRoleUser = (req, res, next) => {
         //console.log('Check for received token from frontend : \n');
         //console.log(token);
         jwt.verify(token, config.JWTKey, (err, data) => {
+            console.log('data', data);
+            console.log('data-id', data.id)
             console.log('data extracted from token \n', data);
-            if (err) {
+            if (err || req.header['user'] != data.id) {
                 console.log(err);
                 return res.status(403).send({ message: 'Unauthorized access' });
             }
