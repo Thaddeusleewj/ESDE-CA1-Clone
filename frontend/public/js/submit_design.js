@@ -6,7 +6,7 @@ if ($submitDesignFormContainer.length != 0) {
     //to server-side api when the #submitButton element fires the click event.
     $('#submitButton').on('click', function(event) {
         event.preventDefault();
-        const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
+        const baseUrl = "https://" + window.location.host.replace("3001", "5000");
         let userId = localStorage.getItem('user_id');
         let designTitle = $('#designTitleInput').val();
         let designDescription = $('#designDescriptionInput').val();

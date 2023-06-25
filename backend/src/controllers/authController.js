@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken');
 exports.processLogin = (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
+
+    console.log(email);
+    console.log(password);
+
     try {
         auth.authenticate(email, function(error, results) {
             if (error) {

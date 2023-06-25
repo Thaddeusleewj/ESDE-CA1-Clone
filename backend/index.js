@@ -7,6 +7,8 @@ const formData = require('express-form-data');
 let app = express();
 app.use('*', cors());
 
+const https = require("https");
+const fs = require("fs");
 
 //Server Settings
 const PORT = 5000;
@@ -90,7 +92,13 @@ router.use((err, req, res, next) => {
     }
 });
 
-app.listen(PORT, err => {
+const sslServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname + "/..", 'cert', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname + "/..", 'cert', 'cert.pem'))
+}, app)
+
+
+sslServer.listen(PORT, err => {
     if (err) return console.log(`Cannot Listen on PORT: ${PORT}`);
-    console.log(`Server is Listening on: http://localhost:${PORT}/`);
+    console.log(`Server is Listening on: https://localhost:${PORT}/`);
 });

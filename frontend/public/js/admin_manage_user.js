@@ -6,7 +6,7 @@ if ($searchDesignFormContainer.length != 0) {
     //to server-side api when the #submitButton element fires the click event.
     $('#submitButton').on('click', function(event) {
         event.preventDefault();
-        const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
+        const baseUrl = "https://" + window.location.host.replace("3001", "5000");
         let searchInput = $('#searchInput').val();
         let userId = localStorage.getItem('user_id');
         // Getting token from localstorage
@@ -96,7 +96,7 @@ if ($searchDesignFormContainer.length != 0) {
 
     function clickHandlerForPageButton(event) {
         event.preventDefault();
-        const baseUrl = "https://" + window.location.hostname.replace("3001", "5000");
+        const baseUrl = "https://" + window.location.host.replace("3001", "5000");
         let userId = localStorage.getItem('user_id');
         let pageNumber = $(event.target).text().trim();
         let searchInput = $('#searchInput').val();
