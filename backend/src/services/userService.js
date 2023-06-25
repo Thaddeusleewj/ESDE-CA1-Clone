@@ -73,12 +73,21 @@ module.exports.getUserData = (pageNumber, search) => {
         FROM user INNER JOIN role ON user.role_id = role.role_id LIMIT ? OFFSET ?;
         SET @total_records =(SELECT count(user_id) FROM user    );SELECT @total_records total_records; `;
         queryParams = [limit, offset];
+
+        // userDataQuery = `SELECT user_id, fullname, email, role_name 
+        // FROM user INNER JOIN role ON user.role_id = role.role_id LIMIT ${limit} OFFSET ${offset};
+        // SET @total_records =(SELECT count(user_id) FROM user    );SELECT @total_records total_records; `;
+
         console.log(limit, offset);
     } else {
         userDataQuery = `SELECT user_id, fullname, email, role_name FROM user INNER JOIN role ON user.role_id = role.role_id WHERE fullname LIKE CONCAT('%', ?, '%') LIMIT ? OFFSET ?;
         SET @total_records = (SELECT COUNT(user_id) FROM user WHERE fullname LIKE CONCAT('%', ?, '%'));
         SELECT @total_records AS total_records;`
         queryParams = [search, limit, offset, search];
+
+        // userDataQuery = `SELECT user_id, fullname, email, role_name 
+        // FROM user INNER JOIN role ON user.role_id = role.role_id AND fullname LIKE '%${search}%'  LIMIT ${limit} OFFSET ${offset};
+        // SET @total_records =(SELECT count(user_id) FROM user WHERE fullname LIKE '%${search}%' );SELECT @total_records total_records;`;
     }
 
     return new Promise((resolve, reject) => {
@@ -90,6 +99,7 @@ module.exports.getUserData = (pageNumber, search) => {
                 resolve(err);
             } else {
                 // setting parameterized queries [queryParams]
+                // queryParams
                 connection.query(userDataQuery, queryParams, (err, results) => {
                     if (err) {
                         reject(err);

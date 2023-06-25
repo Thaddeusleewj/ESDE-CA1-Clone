@@ -13,6 +13,7 @@ exports.appRoute = router => {
     // router.post('/api/user/register', authController.processRegister);
     router.post('/api/user/process-submission', checkUserFn.getClientUserId, userController.processDesignSubmission);
     router.put('/api/user/',userController.processUpdateOneUser);
+    // router.put('/api/user/design/', userController.processUpdateOneDesign);
     router.put('/api/user/design/', uploadValidateFn.validateSubmission, userController.processUpdateOneDesign);
     router.post('/api/user/processInvitation/',checkUserFn.getClientUserId, userController.processSendInvitation);
     router.get('/api/user/process-search-design/:pagenumber/:search?', checkUserFn.getClientUserId, userController.processGetSubmissionData);

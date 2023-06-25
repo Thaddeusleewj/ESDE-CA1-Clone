@@ -69,6 +69,8 @@ module.exports.getFileData = (userId, pageNumber, search) => {
         const limit = 4; //Due to lack of test files, I have set a 4 instead of larger number such as 10 records per page
         const offset = (page - 1) * limit;
         let designFileDataQuery = '';
+        let queryParams = [];
+
         //If the user did not provide any search text, the search variable
         //should be null. The following console.log should output undefined.
         //console.log(search);
@@ -77,12 +79,18 @@ module.exports.getFileData = (userId, pageNumber, search) => {
         if ((search == '') || (search == null)) {
             console.log('Prepare query without search text');
             designFileDataQuery = `SELECT file_id,cloudinary_url,design_title,design_description 
-        FROM file  WHERE created_by_id=${userId}  LIMIT ${limit} OFFSET ${offset};
-        SET @total_records =(SELECT count(file_id) FROM file WHERE created_by_id= ${userId}   );SELECT @total_records total_records; `;
+        FROM file  WHERE created_by_id= ?  LIMIT ? OFFSET ?;
+        SET @total_records =(SELECT count(file_id) FROM file WHERE created_by_id= ?   );SELECT @total_records total_records; `;
+        
+        queryParams = [userId, limit, offset, userId];
+
         } else {
             designFileDataQuery = `SELECT file_id,cloudinary_url,design_title,design_description 
-            FROM file  WHERE created_by_id=${userId} AND design_title LIKE '%${search}%'  LIMIT ${limit} OFFSET ${offset};
-            SET @total_records =(SELECT count(file_id) FROM file WHERE created_by_id= ${userId} AND design_title LIKE '%${search}%' );SELECT @total_records total_records;`;
+            FROM file  WHERE created_by_id= ? AND design_title RLIKE ? LIMIT ? OFFSET ?;
+            SET @total_records =(SELECT count(file_id) FROM file WHERE created_by_id= ? AND design_title RLIKE ?);SELECT @total_records total_records;`;
+        
+            queryParams = [userId, search, limit, offset, userId, search]
+
         }
         //--------------------------------------------------------------------
         //designFileDataQuery = `CALL sp_get_paged_file_records(?,?,?,?, @total_records); SELECT @total_records total_records;`;
@@ -96,7 +104,10 @@ module.exports.getFileData = (userId, pageNumber, search) => {
                     resolve(err);
                 } else {
                     console.log('Executing query to obtain 1 page of 3 data');
-                    connection.query(designFileDataQuery, [userId, search, offset, limit], (err, results) => {
+
+                    
+
+                    connection.query(designFileDataQuery, queryParams, (err, results) => {
                         if (err) {
                             console.log('Error on query on reading data from the file table', err);
                             reject(err);
