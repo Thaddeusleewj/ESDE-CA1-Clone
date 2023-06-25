@@ -9,6 +9,14 @@ if ($loginFormContainer.length != 0) {
         const baseUrl = "https://" + window.location.host.replace("3001", "5000");
         let email = $('#emailInput').val();
         let password = $('#passwordInput').val();
+
+        // Encrypt 
+        let encryptedEmail = CryptoJS.AES.encrypt(email, "123").toString();
+        let encryptedPw = CryptoJS.AES.encrypt(password, "123").toString();
+
+        console.log(encryptedEmail);
+        console.log("Decrypted " + CryptoJS.AES.decrypt(encryptedEmail, "123").toString(CryptoJS.enc.Utf8));
+
         let webFormData = new FormData();
         webFormData.append('email', email);
         webFormData.append('password', password);
@@ -27,14 +35,14 @@ if ($loginFormContainer.length != 0) {
                     localStorage.setItem('token', userData.token);
                     localStorage.setItem('user_id', userData.user_id);
                     localStorage.setItem('role_name', userData.role_name);
-                    window.location.replace('user/manage_submission.html');
+                    // window.location.replace('user/manage_submission.html');
                     return;
                 }
                 if (response.data.role_name == 'admin') {
                     localStorage.setItem('token', userData.token);
                     localStorage.setItem('user_id', userData.user_id);
                     localStorage.setItem('role_name', userData.role_name);
-                    window.location.replace('admin/manage_users.html');
+                    // window.location.replace('admin/manage_users.html');
                     return;
                 }
             })
