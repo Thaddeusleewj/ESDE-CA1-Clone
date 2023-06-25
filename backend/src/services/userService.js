@@ -146,7 +146,7 @@ module.exports.getOneUserDataByEmail = function (search) {
     console.log('getOneUserDataByEmail method is called.');
     console.log('Prepare query to fetch one user record');
     userDataQuery = `SELECT user_id, fullname, email, user.role_id, role_name 
-        FROM user INNER JOIN role ON user.role_id = role.role_id WHERE email='` + search + `'`;
+        FROM user INNER JOIN role ON user.role_id = role.role_id WHERE email RLIKE ?`;
 
     return new Promise((resolve, reject) => {
         //I referred to https://www.codota.com/code/javascript/functions/mysql/Pool/getConnection
@@ -156,7 +156,7 @@ module.exports.getOneUserDataByEmail = function (search) {
                 console.log('Database connection error ', err);
                 resolve(err);
             } else {
-                connection.query(userDataQuery, (err, results) => {
+                connection.query(userDataQuery, search, (err, results) => {
                     if (err) {
                         reject(err);
                     } else {
