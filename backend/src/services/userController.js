@@ -43,32 +43,10 @@ exports.processGetSubmissionData = async(req, res, next) => {
     let pageNumber = req.params.pagenumber;
     let search = req.params.search;
     let userId = req.body.userId;
-    const regexChar = /[<>&/\'"]/;
-
     try {
         let results = await fileDataManager.getFileData(userId, pageNumber, search);
         console.log('Inspect result variable inside processGetSubmissionData code\n', results);
         if (results) {
-
-            for (let result in results[0]) {
-                let perSubmission = results[0][result];
-        
-                while (
-                  regexChar.test(perSubmission["design_title"]) ||
-                  regexChar.test(perSubmission["design_description"])
-                ) {
-                  // replace with empty characters
-                  perSubmission["design_title"] = perSubmission["design_title"].replace(
-                    regexChar,
-                    " "
-                  );
-                  perSubmission["design_description"] = perSubmission[
-                    "design_description"
-                  ].replace(regexChar, " ");
-                }
-                results[0][result] = perSubmission;
-            }
-
             var jsonResult = {
                 'number_of_records': results[0].length,
                 'page_number': pageNumber,
